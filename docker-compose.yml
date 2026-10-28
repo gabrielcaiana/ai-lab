@@ -1,0 +1,23 @@
+# Local Postgres for Prisma. Credentials match DATABASE_URL / DIRECT_URL in
+# .env.sample. Locally both URLs are the same: there is no pooler, unlike Supabase.
+services:
+  postgres:
+    image: postgres:17
+    container_name: ai-lab-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ailab
+    ports:
+      - '5432:5432'
+    volumes:
+      - ai-lab-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d ailab']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  ai-lab-postgres:

@@ -165,9 +165,11 @@ Copy `.env.sample` to `.env`:
 ```env
 NUXT_PUBLIC_APP_ENV=development       # 'development' | 'production'
 NUXT_OPENAI_API_KEY=                  # Server-side fallback key (UI key takes priority)
-NUXT_DATABASE_URL=                    # Supabase connection pooling URL
-NUXT_DIRECT_URL=                      # Supabase direct URL (for migrations)
+DATABASE_URL=                         # Prisma connection (local Compose or pooled remote URL)
+DIRECT_URL=                           # Prisma migrations (same as DATABASE_URL locally)
 ```
+
+Local Postgres: `docker compose up -d` (see `docker-compose.yml`). Default URL for both variables: `postgresql://postgres:postgres@localhost:5432/ailab`.
 
 > The UI-configured API token always takes priority over the server-side env key. Set `NUXT_OPENAI_API_KEY` only as a shared fallback.
 

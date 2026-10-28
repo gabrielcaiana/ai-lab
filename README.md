@@ -118,20 +118,21 @@ Edit `.env`:
 
 ```env
 NUXT_PUBLIC_APP_ENV=development
-NUXT_DATABASE_URL=postgresql://...    # Supabase pooling URL
-NUXT_DIRECT_URL=postgresql://...      # Supabase direct URL
+DATABASE_URL=postgresql://postgres:postgres@localhost:5432/ailab
+DIRECT_URL=postgresql://postgres:postgres@localhost:5432/ailab
 NUXT_OPENAI_API_KEY=                  # Optional — can also set per-session in the UI
 NUXT_ANTHROPIC_API_KEY=               # Optional — used by /compare when the UI has no Anthropic key
 OLLAMA_BASE_URL=http://localhost:11434 # Optional
 ```
 
+Prisma reads `DATABASE_URL` and `DIRECT_URL` (not the `NUXT_` prefix). With the local Compose service they are the same URL. A remote pooler such as Supabase uses the pooled URL in `DATABASE_URL` and the direct URL in `DIRECT_URL`.
+
 ### 3. Set up the database
 
-Any Postgres works. For a fully local setup I use Docker:
+Any Postgres works. For a fully local setup, start the Compose service (host port `5432` must be free):
 
 ```bash
-docker run -d --name ai-lab-db -e POSTGRES_PASSWORD=postgres -e POSTGRES_DB=ailab -p 5432:5432 postgres:17
-# .env → DATABASE_URL / DIRECT_URL = postgresql://postgres:postgres@localhost:5432/ailab
+docker compose up -d
 pnpm prisma:migrate
 npx prisma db seed   # creates the default user used by chats
 ```
